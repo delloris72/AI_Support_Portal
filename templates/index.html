@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Support Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-10 font-sans">
+    <div class="max-w-4xl mx-auto bg-white p-8 rounded-xl shadow-2xl">
+        <h1 class="text-3xl font-extrabold mb-6 text-blue-700">AI Support Dashboard</h1>
+        
+        <!-- NEW: Submit Form -->
+        <form action="/create-ticket/" method="post" class="mb-10 bg-blue-50 p-6 rounded-lg border border-blue-200">
+            <label class="block mb-2 font-bold text-blue-900">Report a New Problem:</label>
+            <div class="flex gap-4">
+                <input type="text" name="problem" autofocus placeholder="e.g. My screen is broken" class="flex-1 p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                <button type="submit" class="bg-blue-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-blue-700 transition">Analyze & Save</button>
+            </div>
+        </form>
+        <form action="/clear-tickets/" method="post" class="mt-4 text-right">
+    <button type="submit" class="text-red-600 hover:text-red-800 text-sm font-bold underline">
+        Clear All Tickets
+    </button>
+</form>
+
+        <!-- Ticket Table -->
+        <table class="w-full text-left">
+            <thead>
+                <tr class="bg-gray-200 text-gray-700 uppercase text-sm">
+                    <th class="p-4 border-b">ID</th>
+                    <th class="p-4 border-b">Problem</th>
+                    <th class="p-4 border-b">AI Analysis</th>
+                </tr>
+            </thead>
+            <tbody>
+               {% if not tickets %}
+    <p class="text-center text-gray-500 py-10">No tickets yet. Type a problem above to start the AI analysis!</p>
+{% endif %}
+                {% for ticket in tickets %}
+                <tr class="hover:bg-gray-50 border-b">
+                    <td class="p-4 font-mono text-gray-400">{{ ticket.id }}</td>
+                    <td class="p-4 text-gray-800">{{ ticket.description }}</td>
+                    <td class="p-4">
+                        <span class="px-3 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-700">
+                            <td class="p-4">
+    <!-- If the category contains 'Urgent', make it Red. Otherwise, keep it Blue. -->
+    {% if 'Urgent' in ticket.category %}
+    <span class="px-3 py-1 rounded-full text-xs font-bold bg-red-100 text-red-700 border border-red-200">
+        {{ ticket.category }}
+    </span>
+    {% else %}
+    <span class="px-3 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-700 border border-blue-200">
+        {{ ticket.category }}
+    </span>
+    {% endif %}
+                            </td>
+                        </span>
+                    </td>
+                </tr>
+                {% endfor %}
